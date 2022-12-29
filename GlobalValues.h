@@ -11,9 +11,16 @@ public:
 	RECT rc;
 	FLOAT width;
 	FLOAT height;
+	FLOAT mouse_x;
+	FLOAT mouse_y;
+	FLOAT archer_center_x;
+	FLOAT archer_center_y;
+	FLOAT arrow_distance_from_archer_center;
+	FLOAT arrow_length;
 
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
+	void updateRC(const HWND& hwnd);
 	void destroyValues();
 };
 

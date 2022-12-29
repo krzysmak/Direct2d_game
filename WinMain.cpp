@@ -14,7 +14,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 using D2D1::RenderTargetProperties;
 using D2D1::HwndRenderTargetProperties;
 using D2D1::SizeU;
-
 using D2D1::ColorF;
 using D2D1::LinearGradientBrushProperties;
 using D2D1::Point2F;
@@ -84,19 +83,29 @@ void exampleHandler() {
     exit(0);
 }
 
+FLOAT XD = 2;
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
     switch (uMsg) {
         case WM_CREATE:
         {
-            g = new GlobalValues();
-            HRESULT hr = g->initValues(hwnd);
-            if (!SUCCEEDED(hr)) {
-                exampleHandler();
+            if (!g) {
+                g = new GlobalValues();
+                HRESULT hr = g->initValues(hwnd);
+                if (!SUCCEEDED(hr)) {
+                    exampleHandler();
+                }
+                XD = g->width;
             }
-            p = new PaintAccessories();
-            p->initAccessories(g);
-            SetTimer(hwnd, 1, 10, NULL);
+            else {
+                exit(0);
+            }
+            if (!p) {
+                p = new PaintAccessories();
+                p->initAccessories(g);
+            }
+            SetTimer(hwnd, 1, 5, NULL);
             return 0;
         }
         case WM_DESTROY:
@@ -107,21 +116,33 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             PostQuitMessage(0);
             return 0;
         }
+        case WM_MOUSEMOVE:
+        {
+            g->mouse_x = (LOWORD(lParam));
+            g->mouse_y = (HIWORD(lParam));
+            return 0;
+        }
         case WM_PAINT:
         {
+            g->updateRC(hwnd);
             g->d2d_render_target->BeginDraw();
 
             g->d2d_render_target->Clear(p->clear_color);
 
-            if (!arrow)
-               // arrow = new Arrow(); //TODO
-            //arrow->calculatePosition();
-           // arrow->paint(p, g);
-            
-            //g->d2d_render_target->DrawLine(Point2F(200, 200), Point2F(190, 190), p->brush, 1.0f);
+            if (!arrow) {
+                arrow = new Arrow(Point2F(g->archer_center_x + g->arrow_distance_from_archer_center,
+                    g->archer_center_y),
+                    Point2F(g->archer_center_x + g->arrow_distance_from_archer_center + g->arrow_length,
+                        g->archer_center_y));
+            }
+            arrow->calculatePosition(g->mouse_x, g->mouse_y, g);
+            arrow->paint(p, g);
 
             g->d2d_render_target->EndDraw();
+            g->mouse_x += g->width;
+            g->mouse_y += g->height;
             InvalidateRect(hwnd, &g->rc, 0);
+           
             return 0;
         }
     }

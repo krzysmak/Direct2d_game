@@ -9,11 +9,12 @@
 class Arrow {
 	D2D1_POINT_2F start;
 	D2D1_POINT_2F end;
+	bool isFlying;
 
 public:
 	Arrow(D2D1_POINT_2F start, D2D1_POINT_2F end);
 	void paint(PaintAccessories *p, GlobalValues *g);
-	void calculatePosition();
+	void calculatePosition(FLOAT mouse_x, FLOAT mouse_y, GlobalValues* g);
 };
 
 #endif // ARROW
