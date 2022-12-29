@@ -1,3 +1,5 @@
+#include "WinMain.h"
+#include "GlobalValues.h"
 #include <windows.h>
 #include <d2d1_3.h>
 #include <iostream>
@@ -21,8 +23,7 @@ using D2D1::Matrix3x2F;
 using D2D1::Ellipse;
 using std::sin;
 
-ID2D1Factory7* d2d_factory = nullptr;
-ID2D1HwndRenderTarget* d2d_render_target = nullptr;
+GlobalValues *g;
 
 INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ PWSTR cmd_line, _In_ INT cmd_show) {
 
@@ -91,36 +92,18 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
     switch (uMsg) {
     case WM_CREATE:
-        if (!d2d_factory) {
-            HRESULT hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &d2d_factory);
-            if (!SUCCEEDED(hr)) {
-                exampleHandler();
-            }
-        }
-
-        if (!d2d_render_target) {
-            HRESULT hr = d2d_factory->CreateHwndRenderTarget(
-                RenderTargetProperties(),
-                HwndRenderTargetProperties(hwnd,
-                    SizeU(static_cast<UINT32>(rc.right) -
-                        static_cast<UINT32>(rc.left),
-                        static_cast<UINT32>(rc.bottom) -
-                        static_cast<UINT32>(rc.top))),
-                &d2d_render_target);
-            if (!SUCCEEDED(hr)) {
-                exampleHandler();
-            }
-        }
+        g = new GlobalValues();
+        g->initValues(hwnd);
         return 0;
     case WM_DESTROY:
-        if (d2d_render_target) d2d_render_target->Release();
-        if (d2d_factory) d2d_factory->Release();
+        g->destroyValues();
+        free(g);
         PostQuitMessage(0);
         return 0;
     case WM_PAINT:
-        d2d_render_target->BeginDraw();
+        g->d2d_render_target->BeginDraw();
 
-        d2d_render_target->EndDraw();
+        g->d2d_render_target->EndDraw();
         InvalidateRect(hwnd, &rc, 0);
         return 0;
     }
