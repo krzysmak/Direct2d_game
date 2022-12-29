@@ -15,6 +15,9 @@ HRESULT GlobalValues::initValues(const HWND &hwnd) {
     HRESULT hr = S_OK;
 
     GetClientRect(hwnd, &rc);
+
+    this->width = rc.right - rc.left;
+    this->height = rc.bottom - rc.top;
     
     if (!d2d_factory) {
         hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &d2d_factory);

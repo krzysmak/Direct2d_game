@@ -7,7 +7,8 @@ void Arrow::paint(PaintAccessories *p, GlobalValues *g) {
 }
 
 void Arrow::calculatePosition() {
-
+	this->start = D2D1_POINT_2F(this->start.x + 1.2, this->path->calculateY(this->start.x + 1.2));
+	this->end = D2D1_POINT_2F(this->end.x + 1.2, this->path->calculateY(this->end.x + 1.2));
 }
 
 Arrow::Arrow(D2D1_POINT_2F start, D2D1_POINT_2F end, ArrowPath* path) {

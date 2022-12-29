@@ -28,6 +28,8 @@ using std::sin;
 
 GlobalValues *g;
 PaintAccessories *p;
+Arrow* arrow;
+ArrowPath* path;
 
 INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ PWSTR cmd_line, _In_ INT cmd_show) {
 
@@ -96,10 +98,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             }
             p = new PaintAccessories();
             p->initAccessories(g);
+            SetTimer(hwnd, 1, 10, NULL);
             return 0;
         }
         case WM_DESTROY:
         {
+            KillTimer(hwnd, 1);
             g->destroyValues();
             free(g);
             PostQuitMessage(0);
@@ -111,8 +115,12 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             g->d2d_render_target->Clear(p->clear_color);
 
-            ArrowPath* path = new ArrowPath(-1, 1, 1);
-            Arrow *arrow = new Arrow(Point2F(200, 200), Point2F(190, 190), path);
+            if (!path)
+                path = new ArrowPath(Point2F(0, g->height), Point2F(g->width, g->height), 0);
+            if (!arrow) 
+                arrow = new Arrow(Point2F(0, path->calculateY(0)), 
+                                  Point2F(10, path->calculateY(10)), path);
+            arrow->calculatePosition();
             arrow->paint(p, g);
             
             //g->d2d_render_target->DrawLine(Point2F(200, 200), Point2F(190, 190), p->brush, 1.0f);
