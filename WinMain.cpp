@@ -1,5 +1,8 @@
 #include "WinMain.h"
 #include "GlobalValues.h"
+#include "PaintAccessories.h"
+#include "ArrowPath.h"
+#include "Arrow.h" 
 #include <windows.h>
 #include <d2d1_3.h>
 #include <iostream>
@@ -24,11 +27,10 @@ using D2D1::Ellipse;
 using std::sin;
 
 GlobalValues *g;
+PaintAccessories *p;
 
 INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ PWSTR cmd_line, _In_ INT cmd_show) {
 
-
-    // Register the window class.
     const wchar_t CLASS_NAME[] = TEXT("Sample Window Class");
 
     WNDCLASSEX wc = { };
@@ -47,8 +49,6 @@ INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _
 
 
     RegisterClassEx(&wc);
-
-    // Create the window.
 
     HWND hwnd = CreateWindowEx(
         0,                              // Optional window styles.
@@ -71,8 +71,6 @@ INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _
 
     ShowWindow(hwnd, cmd_show);
 
-    // Run the message loop.
-
     MSG msg = { };
     while (GetMessage(&msg, NULL, 0, 0) > 0) {
         TranslateMessage(&msg);
@@ -82,8 +80,6 @@ INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _
     return 0;
 }
 
-RECT rc;
-
 void exampleHandler() {
     exit(0);
 }
@@ -91,21 +87,40 @@ void exampleHandler() {
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
     switch (uMsg) {
-    case WM_CREATE:
-        g = new GlobalValues();
-        g->initValues(hwnd);
-        return 0;
-    case WM_DESTROY:
-        g->destroyValues();
-        free(g);
-        PostQuitMessage(0);
-        return 0;
-    case WM_PAINT:
-        g->d2d_render_target->BeginDraw();
+        case WM_CREATE:
+        {
+            g = new GlobalValues();
+            HRESULT hr = g->initValues(hwnd);
+            if (!SUCCEEDED(hr)) {
+                exampleHandler();
+            }
+            p = new PaintAccessories();
+            p->initAccessories(g);
+            return 0;
+        }
+        case WM_DESTROY:
+        {
+            g->destroyValues();
+            free(g);
+            PostQuitMessage(0);
+            return 0;
+        }
+        case WM_PAINT:
+        {
+            g->d2d_render_target->BeginDraw();
 
-        g->d2d_render_target->EndDraw();
-        InvalidateRect(hwnd, &rc, 0);
-        return 0;
+            g->d2d_render_target->Clear(p->clear_color);
+
+            ArrowPath* path = new ArrowPath(-1, 1, 1);
+            Arrow *arrow = new Arrow(Point2F(200, 200), Point2F(190, 190), path);
+            arrow->paint(p, g);
+            
+            //g->d2d_render_target->DrawLine(Point2F(200, 200), Point2F(190, 190), p->brush, 1.0f);
+
+            g->d2d_render_target->EndDraw();
+            InvalidateRect(hwnd, &g->rc, 0);
+            return 0;
+        }
     }
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
