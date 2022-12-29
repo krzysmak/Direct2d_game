@@ -131,14 +131,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arrow.cpp" />
-    <ClCompile Include="ArrowPath.cpp" />
     <ClCompile Include="GlobalValues.cpp" />
     <ClCompile Include="PaintAccessories.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrow.h" />
-    <ClInclude Include="ArrowPath.h" />
     <ClInclude Include="GlobalValues.h" />
     <ClInclude Include="PaintAccessories.h" />
     <ClInclude Include="WinMain.h" />

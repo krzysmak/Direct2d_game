@@ -1,7 +1,6 @@
 #include "WinMain.h"
 #include "GlobalValues.h"
 #include "PaintAccessories.h"
-#include "ArrowPath.h"
 #include "Arrow.h" 
 #include <windows.h>
 #include <d2d1_3.h>
@@ -29,7 +28,6 @@ using std::sin;
 GlobalValues *g;
 PaintAccessories *p;
 Arrow* arrow;
-ArrowPath* path;
 
 INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ PWSTR cmd_line, _In_ INT cmd_show) {
 
@@ -115,13 +113,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             g->d2d_render_target->Clear(p->clear_color);
 
-            if (!path)
-                path = new ArrowPath(Point2F(0, g->height), Point2F(g->width, g->height), 0);
-            if (!arrow) 
-                arrow = new Arrow(Point2F(0, path->calculateY(0)), 
-                                  Point2F(10, path->calculateY(10)), path);
-            arrow->calculatePosition();
-            arrow->paint(p, g);
+            if (!arrow)
+               // arrow = new Arrow(); //TODO
+            //arrow->calculatePosition();
+           // arrow->paint(p, g);
             
             //g->d2d_render_target->DrawLine(Point2F(200, 200), Point2F(190, 190), p->brush, 1.0f);
 
