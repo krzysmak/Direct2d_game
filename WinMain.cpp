@@ -8,6 +8,8 @@
 #include <cmath>
 #include <vector>
 #include <windowsx.h>
+#include "ShootingTarget.h"
+
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 using D2D1::RenderTargetProperties;
@@ -27,6 +29,7 @@ using std::sin;
 GlobalValues *g;
 PaintAccessories *p;
 Arrow* arrow;
+ShootingRange* range;
 
 INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ PWSTR cmd_line, _In_ INT cmd_show) {
 
@@ -83,7 +86,31 @@ void exampleHandler() {
     exit(0);
 }
 
-bool mouse_moved = false;
+void arrowAction() {
+    if (!arrow) {
+        arrow = new Arrow(g);
+    }
+    if (GetAsyncKeyState(VK_LBUTTON) < 0)
+        arrow->onKeyDown(g);
+    else
+        arrow->onKeyUp();
+
+    arrow->calculatePosition(g->mouse_x, g->mouse_y, g);
+    arrow->paint(p, g);
+}
+
+void createRange() {
+    if (!range) {
+        range = new ShootingRange();
+    }
+    if (range->howManyTargets() == 0) {
+        range->addTarget(g->width * 0.9, g->height * 0.8, g);
+    }
+}
+
+void renderShootingTargets() {
+    range->renderTargets(g, p);
+}
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -97,13 +124,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                     exampleHandler();
                 }
             }
-            else {
-                exit(0);
-            }
             if (!p) {
                 p = new PaintAccessories();
                 p->initAccessories(g);
             }
+            createRange();
             SetTimer(hwnd, 1, 5, NULL);
             return 0;
         }
@@ -131,14 +156,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             Matrix3x2F scale = Matrix3x2F::Scale(g->first_width / g->width, g->first_height / g->height, Point2F(0, 0));
             g->d2d_render_target->SetTransform(scale);
             
-            if (!arrow) {
-                arrow = new Arrow(Point2F(g->archer_center_x + g->arrow_distance_from_archer_center,
-                    g->archer_center_y),
-                    Point2F(g->archer_center_x + g->arrow_distance_from_archer_center + g->arrow_length,
-                        g->archer_center_y));
-            }
-            arrow->calculatePosition(g->mouse_x, g->mouse_y, g);
-            arrow->paint(p, g);
+            renderShootingTargets();
+            arrowAction();
 
             g->d2d_render_target->EndDraw();
             InvalidateRect(hwnd, &g->rc, 0);

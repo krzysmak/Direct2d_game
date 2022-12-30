@@ -137,12 +137,14 @@
     <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="GlobalValues.cpp" />
     <ClCompile Include="PaintAccessories.cpp" />
+    <ClCompile Include="ShootingTarget.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrow.h" />
     <ClInclude Include="GlobalValues.h" />
     <ClInclude Include="PaintAccessories.h" />
+    <ClInclude Include="ShootingTarget.h" />
     <ClInclude Include="WinMain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

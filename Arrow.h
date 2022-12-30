@@ -9,12 +9,21 @@
 class Arrow {
 	D2D1_POINT_2F start;
 	D2D1_POINT_2F end;
-	bool isFlying;
+	bool isFlying = false;
+	bool isDrawing = false;
+	bool reachedTop = false;
+	FLOAT velocity = 1;
+	FLOAT tiltRatioX = 0.0f;
+	FLOAT tiltRatioY = 0.0f;
+
 
 public:
 	Arrow(D2D1_POINT_2F start, D2D1_POINT_2F end);
+	Arrow(GlobalValues *g);
 	void paint(PaintAccessories *p, GlobalValues *g);
 	void calculatePosition(FLOAT mouse_x, FLOAT mouse_y, GlobalValues* g);
+	void onKeyDown(GlobalValues* g);
+	void onKeyUp();
 };
 
 #endif // ARROW

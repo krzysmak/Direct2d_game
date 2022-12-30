@@ -19,7 +19,7 @@ public:
 	FLOAT arrow_length;
 	FLOAT first_width;
 	FLOAT first_height;
-
+	const size_t number_of_targets = 3;
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
 	void updateRC(const HWND& hwnd);
