@@ -8,12 +8,12 @@
 #include <cmath>
 #include <vector>
 #include <windowsx.h>
-
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 using D2D1::RenderTargetProperties;
 using D2D1::HwndRenderTargetProperties;
 using D2D1::SizeU;
+
 using D2D1::ColorF;
 using D2D1::LinearGradientBrushProperties;
 using D2D1::Point2F;
@@ -83,7 +83,7 @@ void exampleHandler() {
     exit(0);
 }
 
-FLOAT XD = 2;
+bool mouse_moved = false;
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
@@ -96,7 +96,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 if (!SUCCEEDED(hr)) {
                     exampleHandler();
                 }
-                XD = g->width;
             }
             else {
                 exit(0);
@@ -118,8 +117,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         }
         case WM_MOUSEMOVE:
         {
-            g->mouse_x = (LOWORD(lParam));
-            g->mouse_y = (HIWORD(lParam));
+            g->mouse_x = LOWORD(lParam);
+            g->mouse_y = HIWORD(lParam);
             return 0;
         }
         case WM_PAINT:
@@ -129,6 +128,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             g->d2d_render_target->Clear(p->clear_color);
 
+            Matrix3x2F scale = Matrix3x2F::Scale(g->first_width / g->width, g->first_height / g->height, Point2F(0, 0));
+            g->d2d_render_target->SetTransform(scale);
+            
             if (!arrow) {
                 arrow = new Arrow(Point2F(g->archer_center_x + g->arrow_distance_from_archer_center,
                     g->archer_center_y),
@@ -139,8 +141,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             arrow->paint(p, g);
 
             g->d2d_render_target->EndDraw();
-            g->mouse_x += g->width;
-            g->mouse_y += g->height;
             InvalidateRect(hwnd, &g->rc, 0);
            
             return 0;

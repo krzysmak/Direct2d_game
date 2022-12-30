@@ -20,7 +20,8 @@ HRESULT GlobalValues::initValues(const HWND &hwnd) {
 
     this->width = rc.right - rc.left;
     this->height = rc.bottom - rc.top;
-    
+    this->first_width = this->width;
+    this->first_height = this->height;
     this->archer_center_x = this->width / 2;
     this->archer_center_y = this->height / 2;
     this->arrow_distance_from_archer_center = 20;

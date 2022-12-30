@@ -17,6 +17,8 @@ public:
 	FLOAT archer_center_y;
 	FLOAT arrow_distance_from_archer_center;
 	FLOAT arrow_length;
+	FLOAT first_width;
+	FLOAT first_height;
 
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
