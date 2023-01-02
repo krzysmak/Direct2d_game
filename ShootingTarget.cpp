@@ -3,6 +3,8 @@
 #include <d2d1_3.h>
 #include "GlobalValues.h"
 #include "PaintAccessories.h"
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 using D2D1::RadialGradientBrushProperties;
 using D2D1::Point2F;
@@ -15,12 +17,21 @@ Baloon::Baloon(FLOAT x, FLOAT y, GlobalValues *g) {
 }
 
 void Baloon::render(GlobalValues *g, PaintAccessories *p) {
-	g->d2d_render_target->CreateGradientStopCollection(p->rad_stops_data, p->NUM_RAD_STOPS, &p->rad_stops);
-	if (p->rad_stops) {
-		g->d2d_render_target->CreateRadialGradientBrush(RadialGradientBrushProperties(center,
-			Point2F(0, 0), 70, 70), p->rad_stops, &p->rad_brush);
-		g->d2d_render_target->FillEllipse(Ellipse(center, radiusX, radiusY), p->rad_brush);
-		center.y -= 1;
+	if (this->ticks_popped == 0) {
+		g->d2d_render_target->CreateGradientStopCollection(p->rad_stops_data, p->NUM_RAD_STOPS, &p->rad_stops);
+		if (p->rad_stops) {
+			g->d2d_render_target->CreateRadialGradientBrush(RadialGradientBrushProperties(center,
+				Point2F(0, 0), 70, 70), p->rad_stops, &p->rad_brush);
+			g->d2d_render_target->FillEllipse(Ellipse(center, radiusX, radiusY), p->rad_brush);
+			center.y -= 1;
+		}
+	}
+	else {
+		this->ticks_popped--;
+		if (this->ticks_popped != 0)
+			this->pop(g, p);
+		else
+			this->ticks_popped--;
 	}
 }
 
@@ -73,4 +84,81 @@ void ShootingRange::renderBaloon(GlobalValues* g, PaintAccessories* p) {
 	else {
 		this->baloon->render(g, p);
 	}
+}
+
+void ShootingRange::checkHits(FLOAT arrowX, FLOAT arrowY, GlobalValues* g, PaintAccessories* p) {
+	for (auto& target : this->targets) {
+		target.checkHit(arrowX, arrowY, g, p);
+	}
+	if (this->baloon) {
+		if (this->baloon->ticks_popped == 0)
+			this->baloon->checkHit(arrowX, arrowY, g, p);
+		else if (this->baloon->ticks_popped < 0) {
+			delete this->baloon;
+			this->baloon = nullptr;
+		}
+	}
+}
+
+bool isInsideEllipse(FLOAT ellipseCenterX, FLOAT ellipseCenterY, FLOAT radiusX, FLOAT radiusY, FLOAT x, FLOAT y) {
+	FLOAT dx = x - ellipseCenterX;
+	FLOAT dy = y - ellipseCenterY;
+	FLOAT distanceSquared = dx * dx / (radiusX * radiusX) + dy * dy / (radiusY * radiusY);
+	return distanceSquared <= 1;
+}
+
+void Baloon::checkHit(FLOAT arrowX, FLOAT arrowY, GlobalValues* g, PaintAccessories* p) {
+	if (isInsideEllipse(this->center.x, this->center.y, this->radiusX, this->radiusY, arrowX, arrowY)) {
+		this->ticks_popped = g->baloon_pop_animation_length;
+		this->pop(g, p);
+	}
+}
+
+void ShootingTarget::checkHit(FLOAT arrowX, FLOAT arrowY, GlobalValues* g, PaintAccessories* p) {
+	if (isInsideEllipse(this->center.x, this->center.y, this->radiusX, this->radiusY, arrowX, arrowY)) {
+		this->pop(g, p);
+	}
+}
+
+void DrawScrap(GlobalValues *g, ID2D1Brush* brush, float x, float y, float size) {
+	static const D2D1_POINT_2F points[3] = {
+	  D2D1::Point2F(-size / 2.0f, -size / 2.0f),
+	  D2D1::Point2F(size / 2.0f, -size / 2.0f),
+	  D2D1::Point2F(0.0f, size / 2.0f),
+	};
+	ID2D1PathGeometry* geometry;
+	g->d2d_factory->CreatePathGeometry(&geometry);
+	ID2D1GeometrySink* sink;
+	geometry->Open(&sink);
+	sink->BeginFigure(points[0], D2D1_FIGURE_BEGIN_FILLED);
+	sink->AddLines(points + 1, 2);
+	sink->EndFigure(D2D1_FIGURE_END_CLOSED);
+	sink->Close();
+	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Translation(x, y);
+	D2D1::Matrix3x2F original_transform;
+	g->d2d_render_target->GetTransform(&original_transform); // save the original transform
+	transform.SetProduct(transform, original_transform);
+	g->d2d_render_target->SetTransform(transform); // apply the translation transform
+	g->d2d_render_target->DrawGeometry(geometry, brush, 3.0f);
+	g->d2d_render_target->SetTransform(original_transform); // restore the original transform
+	sink->Release();
+	geometry->Release();
+}
+
+void Baloon::pop(GlobalValues *g, PaintAccessories *p) {
+	size_t number_of_scraps = 15;
+	float t = (float)(this->ticks_popped) / (float)g->baloon_pop_animation_length;
+	float radius = (this->radiusY) * (1.0f - t);
+	FLOAT size = 2.0f * radius / number_of_scraps;
+	size += 1;
+	for (int j = 0; j < number_of_scraps; j++) {
+		float angle = 2.0f * M_PI * (float)j / (float)number_of_scraps;
+		float scrap_x = this->center.x + radius * cos(angle);
+		float scrap_y = this->center.y + radius * sin(angle);
+		DrawScrap(g, p->yellow_brush, scrap_x, scrap_y, size);
+	}
+}
+
+void ShootingTarget::pop(GlobalValues* g, PaintAccessories* p) {
+	g->minigame = true;
 }

@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Arrow.cpp" />
     <ClCompile Include="GlobalValues.cpp" />
+    <ClCompile Include="Minigame.cpp" />
     <ClCompile Include="PaintAccessories.cpp" />
     <ClCompile Include="ShootingTarget.cpp" />
     <ClCompile Include="WinMain.cpp" />
@@ -143,6 +144,7 @@
   <ItemGroup>
     <ClInclude Include="Arrow.h" />
     <ClInclude Include="GlobalValues.h" />
+    <ClInclude Include="Minigame.h" />
     <ClInclude Include="PaintAccessories.h" />
     <ClInclude Include="ShootingTarget.h" />
     <ClInclude Include="WinMain.h" />

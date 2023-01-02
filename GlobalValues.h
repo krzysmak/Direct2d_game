@@ -17,9 +17,12 @@ public:
 	FLOAT archer_center_y;
 	FLOAT arrow_distance_from_archer_center;
 	FLOAT arrow_length;
-	FLOAT first_width;
+	FLOAT first_width; 
 	FLOAT first_height;
 	const size_t number_of_targets = 3;
+	const size_t baloon_pop_animation_length = 60;
+	FLOAT ground_level;
+	bool minigame = false;
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
 	void updateRC(const HWND& hwnd);

@@ -9,6 +9,7 @@
 #include <vector>
 #include <windowsx.h>
 #include "ShootingTarget.h"
+#include "Minigame.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -30,6 +31,7 @@ GlobalValues *g;
 PaintAccessories *p;
 Arrow* arrow;
 ShootingRange* range;
+Minigame* minigame;
 
 INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _In_ PWSTR cmd_line, _In_ INT cmd_show) {
 
@@ -97,6 +99,11 @@ void arrowAction() {
 
     arrow->calculatePosition(g->mouse_x, g->mouse_y, g);
     arrow->paint(p, g);
+    range->checkHits(arrow->getArrowEndX(), arrow->getArrowEndY(), g, p);
+    if (arrow->checkIfLanded(g)) {
+        delete arrow;
+        arrow = nullptr;
+    };
 }
 
 void createRange() {
@@ -111,6 +118,14 @@ void createRange() {
 void renderShootingTargets() {
     range->renderTargets(g, p);
     range->renderBaloon(g, p);
+}
+
+void renderMinigame() {
+    if (!minigame) {
+        minigame = new Minigame();
+    }
+    minigame->setArrowSpeed(arrow->getVelocity());
+    minigame->render(g, p);
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
@@ -156,10 +171,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             Matrix3x2F scale = Matrix3x2F::Scale(g->first_width / g->width, g->first_height / g->height, Point2F(0, 0));
             g->d2d_render_target->SetTransform(scale);
-            
-            renderShootingTargets();
-            arrowAction();
-
+            if (!g->minigame) {
+                renderShootingTargets();
+                arrowAction();
+            }
+            else {
+                renderMinigame();
+            }
             g->d2d_render_target->EndDraw();
             InvalidateRect(hwnd, &g->rc, 0);
            

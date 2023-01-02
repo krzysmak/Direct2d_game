@@ -23,7 +23,8 @@ HRESULT GlobalValues::initValues(const HWND &hwnd) {
     this->first_width = this->width;
     this->first_height = this->height;
     this->archer_center_x = this->width / 10;
-    this->archer_center_y = this->height * 0.9;
+    this->archer_center_y = this->height * 0.8;
+    this->ground_level = this->archer_center_y + this->arrow_distance_from_archer_center + this->arrow_length + 10;
     this->arrow_distance_from_archer_center = 20;
     this->arrow_length = 30;
 
@@ -57,7 +58,8 @@ void GlobalValues::updateRC(const HWND& hwnd) {
     this->width = rc.right - rc.left;
     this->height = rc.bottom - rc.top;
     this->archer_center_x = this->width / 10;
-    this->archer_center_y = this->height * 0.9;
+    this->archer_center_y = this->height * 0.8;
+    this->ground_level = this->archer_center_y + this->arrow_distance_from_archer_center + this->arrow_length + 10;
 }
 
 void GlobalValues::destroyValues() {

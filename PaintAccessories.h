@@ -12,6 +12,7 @@ public:
     FLOAT const brush_width = 3.0f;
     ID2D1SolidColorBrush* brush;
     ID2D1SolidColorBrush* black_brush;
+    ID2D1SolidColorBrush* yellow_brush;
     const static size_t number_of_colors_target = 5;
     ID2D1SolidColorBrush* target_brush[number_of_colors_target];
     ID2D1RadialGradientBrush* rad_brush = nullptr;

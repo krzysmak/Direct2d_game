@@ -22,6 +22,7 @@ void PaintAccessories::initAccessories(GlobalValues *g) {
     rad_stops_data[4] =
     { .position = 1.0f, .color = ColorF(ColorF::LightGoldenrodYellow, 1.0f) };
     g->d2d_render_target->CreateGradientStopCollection(rad_stops_data, NUM_RAD_STOPS, &rad_stops);
+    g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow, 1.0f), &this->yellow_brush);
     g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 1.0f), &this->black_brush);
     g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Yellow, 1.0f), &this->target_brush[4]);
     g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Red, 1.0f), &this->target_brush[3]);

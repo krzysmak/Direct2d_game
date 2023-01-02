@@ -86,3 +86,7 @@ void Arrow::onKeyDown(GlobalValues *g) {
 		this->tiltRatioY = y / perfectRatio;
 	}
 }
+
+bool Arrow::checkIfLanded(GlobalValues* g) {
+	return (start.x >= g->width || end.y >= g->ground_level);
+}
