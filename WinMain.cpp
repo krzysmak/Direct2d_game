@@ -110,6 +110,7 @@ void createRange() {
 
 void renderShootingTargets() {
     range->renderTargets(g, p);
+    range->renderBaloon(g, p);
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
