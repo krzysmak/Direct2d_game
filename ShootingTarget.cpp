@@ -116,7 +116,10 @@ void Baloon::checkHit(FLOAT arrowX, FLOAT arrowY, GlobalValues* g, PaintAccessor
 
 void ShootingTarget::checkHit(FLOAT arrowX, FLOAT arrowY, GlobalValues* g, PaintAccessories* p) {
 	if (isInsideEllipse(this->center.x, this->center.y, this->radiusX, this->radiusY, arrowX, arrowY)) {
-		this->pop(g, p);
+		FLOAT targetBottom = this->center.y + this->radiusY;
+		FLOAT arrowRelativeY = targetBottom - arrowY;
+		FLOAT arrowHitYPercent = arrowRelativeY / (2 * this->radiusY);
+		this->pop(g, p, arrowHitYPercent);
 	}
 }
 
@@ -126,7 +129,7 @@ void DrawScrap(GlobalValues *g, ID2D1Brush* brush, float x, float y, float size)
 	  D2D1::Point2F(size / 2.0f, -size / 2.0f),
 	  D2D1::Point2F(0.0f, size / 2.0f),
 	};
-	ID2D1PathGeometry* geometry;
+	ID2D1PathGeometry* geometry = nullptr;
 	g->d2d_factory->CreatePathGeometry(&geometry);
 	ID2D1GeometrySink* sink;
 	geometry->Open(&sink);
@@ -136,11 +139,11 @@ void DrawScrap(GlobalValues *g, ID2D1Brush* brush, float x, float y, float size)
 	sink->Close();
 	D2D1::Matrix3x2F transform = D2D1::Matrix3x2F::Translation(x, y);
 	D2D1::Matrix3x2F original_transform;
-	g->d2d_render_target->GetTransform(&original_transform); // save the original transform
+	g->d2d_render_target->GetTransform(&original_transform);
 	transform.SetProduct(transform, original_transform);
-	g->d2d_render_target->SetTransform(transform); // apply the translation transform
+	g->d2d_render_target->SetTransform(transform);
 	g->d2d_render_target->DrawGeometry(geometry, brush, 3.0f);
-	g->d2d_render_target->SetTransform(original_transform); // restore the original transform
+	g->d2d_render_target->SetTransform(original_transform);
 	sink->Release();
 	geometry->Release();
 }
@@ -159,6 +162,7 @@ void Baloon::pop(GlobalValues *g, PaintAccessories *p) {
 	}
 }
 
-void ShootingTarget::pop(GlobalValues* g, PaintAccessories* p) {
+void ShootingTarget::pop(GlobalValues* g, PaintAccessories* p, FLOAT arrowHitYPercent) {
 	g->minigame = true;
+	g->arrowHitYPercent = arrowHitYPercent;
 }

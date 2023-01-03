@@ -11,6 +11,10 @@ class Minigame {
 	FLOAT arrowSpeed;
 	FLOAT arrowBottom;
 	FLOAT arrowTop;
+	bool arrowIsFlying = false;
+	FLOAT radius;
+	FLOAT target_bottom;
+	FLOAT flight_time = 0;
 public:
 	void render(GlobalValues *g, PaintAccessories *p);
 	void moveAndRenderArrow(GlobalValues* g, PaintAccessories* p);

@@ -23,6 +23,7 @@ public:
 	const size_t baloon_pop_animation_length = 60;
 	FLOAT ground_level;
 	bool minigame = false;
+	FLOAT arrowHitYPercent;
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
 	void updateRC(const HWND& hwnd);

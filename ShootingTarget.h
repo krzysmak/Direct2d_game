@@ -35,7 +35,7 @@ public:
 	ShootingTarget(FLOAT x, FLOAT y, GlobalValues* g, bool going_up = false);
 	void render(GlobalValues* g, PaintAccessories* p);
 	void checkHit(FLOAT arrowX, FLOAT arrowY, GlobalValues* g, PaintAccessories* p);
-	void pop(GlobalValues* g, PaintAccessories* p);
+	void pop(GlobalValues* g, PaintAccessories* p, FLOAT arrowHitYPercent);
 };
 
 class ShootingRange {

@@ -172,8 +172,13 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             Matrix3x2F scale = Matrix3x2F::Scale(g->first_width / g->width, g->first_height / g->height, Point2F(0, 0));
             g->d2d_render_target->SetTransform(scale);
             if (!g->minigame) {
-                renderShootingTargets();
-                arrowAction();
+                if (minigame) {
+                    // Handle minigame end
+                }
+                else {
+                    renderShootingTargets();
+                    arrowAction();
+                }
             }
             else {
                 renderMinigame();
