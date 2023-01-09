@@ -135,6 +135,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arrow.cpp" />
+    <ClCompile Include="BitmapMaker.cpp" />
     <ClCompile Include="GlobalValues.cpp" />
     <ClCompile Include="Minigame.cpp" />
     <ClCompile Include="PaintAccessories.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arrow.h" />
+    <ClInclude Include="BitmapMaker.h" />
     <ClInclude Include="GlobalValues.h" />
     <ClInclude Include="Minigame.h" />
     <ClInclude Include="PaintAccessories.h" />

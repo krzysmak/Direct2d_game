@@ -65,4 +65,5 @@ void GlobalValues::updateRC(const HWND& hwnd) {
 void GlobalValues::destroyValues() {
     if (d2d_render_target) d2d_render_target->Release();
     if (d2d_factory) d2d_factory->Release();
+    if (landscape) landscape->Release();
 }

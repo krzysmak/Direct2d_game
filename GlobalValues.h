@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <d2d1_3.h>
+#include <wincodec.h>
 
 class GlobalValues {
 public:
@@ -24,6 +25,7 @@ public:
 	FLOAT ground_level;
 	bool minigame = false;
 	FLOAT arrowHitYPercent;
+	ID2D1Bitmap* landscape = nullptr;
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
 	void updateRC(const HWND& hwnd);

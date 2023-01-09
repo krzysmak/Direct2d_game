@@ -10,6 +10,9 @@
 #include <windowsx.h>
 #include "ShootingTarget.h"
 #include "Minigame.h"
+#include <array>
+#include <wincodec.h>
+#include "BitmapMaker.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -26,6 +29,10 @@ using D2D1::QuadraticBezierSegment;
 using D2D1::Matrix3x2F;
 using D2D1::Ellipse;
 using std::sin;
+using D2D1::BitmapProperties;
+using D2D1::PixelFormat;
+using D2D1::RectF;
+using std::array;
 
 GlobalValues *g;
 PaintAccessories *p;
@@ -146,6 +153,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             }
             createRange();
             SetTimer(hwnd, 1, 5, NULL);
+
+            IWICImagingFactory* pWICFactory = NULL;
+            initializeFactory(pWICFactory);
+            loadBitmap(hwnd, TEXT("landscape.png"), pWICFactory, g);
             return 0;
         }
         case WM_DESTROY:
@@ -169,11 +180,22 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
             g->d2d_render_target->Clear(p->clear_color);
 
+            // Bitmap start
+            
+            
+
             Matrix3x2F scale = Matrix3x2F::Scale(g->first_width / g->width, g->first_height / g->height, Point2F(0, 0));
             g->d2d_render_target->SetTransform(scale);
+
+            g->d2d_render_target->DrawBitmap(
+                g->landscape,
+                RectF(g->rc.left, g->rc.top, g->rc.right, g->rc.bottom),
+                1.0f,
+                D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
+
             if (!g->minigame) {
                 if (minigame) {
-                    // Handle minigame end
+                    // TODO Handle minigame end
                 }
                 else {
                     renderShootingTargets();
@@ -183,6 +205,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             else {
                 renderMinigame();
             }
+
+            
+
+
             g->d2d_render_target->EndDraw();
             InvalidateRect(hwnd, &g->rc, 0);
            
