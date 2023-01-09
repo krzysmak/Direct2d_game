@@ -29,4 +29,12 @@ void PaintAccessories::initAccessories(GlobalValues *g) {
     g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightBlue, 1.0f), &this->target_brush[2]);
     g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black, 1.0f), &this->target_brush[1]);
     g->d2d_render_target->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::White, 1.0f), &this->target_brush[0]);
+    g->d2d_render_target->CreateGradientStopCollection(rad_stops_data, NUM_RAD_STOPS, &rad_stops);
+}
+
+void PaintAccessories::destroyValues() {
+    if (black_brush) black_brush->Release();
+    if (brush) brush->Release();
+    if (yellow_brush) yellow_brush->Release();
+    if (rad_stops) rad_stops->Release();
 }

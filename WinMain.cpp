@@ -163,6 +163,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
         {
             KillTimer(hwnd, 1);
             g->destroyValues();
+            p->destroyValues();
             free(g);
             PostQuitMessage(0);
             return 0;
@@ -179,10 +180,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             g->d2d_render_target->BeginDraw();
 
             g->d2d_render_target->Clear(p->clear_color);
-
-            // Bitmap start
-            
-            
 
             Matrix3x2F scale = Matrix3x2F::Scale(g->first_width / g->width, g->first_height / g->height, Point2F(0, 0));
             g->d2d_render_target->SetTransform(scale);
@@ -205,10 +202,6 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             else {
                 renderMinigame();
             }
-
-            
-
-
             g->d2d_render_target->EndDraw();
             InvalidateRect(hwnd, &g->rc, 0);
            

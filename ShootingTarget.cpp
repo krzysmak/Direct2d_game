@@ -18,12 +18,12 @@ Baloon::Baloon(FLOAT x, FLOAT y, GlobalValues *g) {
 
 void Baloon::render(GlobalValues *g, PaintAccessories *p) {
 	if (this->ticks_popped == 0) {
-		g->d2d_render_target->CreateGradientStopCollection(p->rad_stops_data, p->NUM_RAD_STOPS, &p->rad_stops);
 		if (p->rad_stops) {
 			g->d2d_render_target->CreateRadialGradientBrush(RadialGradientBrushProperties(center,
 				Point2F(0, 0), 70, 70), p->rad_stops, &p->rad_brush);
 			g->d2d_render_target->FillEllipse(Ellipse(center, radiusX, radiusY), p->rad_brush);
 			center.y -= 1;
+			p->rad_brush->Release();
 		}
 	}
 	else {

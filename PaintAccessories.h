@@ -21,6 +21,7 @@ public:
     ID2D1GradientStopCollection* rad_stops = nullptr;
     D2D1_COLOR_F create_color(FLOAT r, FLOAT g, FLOAT b, FLOAT a);
     void initAccessories(GlobalValues *g);
+    void destroyValues();
 };
 
 #endif // PAINT_ACCESSORIES

@@ -26,7 +26,7 @@ HRESULT GlobalValues::initValues(const HWND &hwnd) {
     this->archer_center_y = this->height * 0.8;
     this->ground_level = this->archer_center_y + this->arrow_distance_from_archer_center + this->arrow_length + 10;
     this->arrow_distance_from_archer_center = 20;
-    this->arrow_length = 30;
+    this->arrow_length = 50;
 
     if (!d2d_factory) {
         hr = D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, &d2d_factory);
