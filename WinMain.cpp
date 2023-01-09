@@ -13,6 +13,8 @@
 #include <array>
 #include <wincodec.h>
 #include "BitmapMaker.h"
+#include <dwrite_3.h>
+#include "Score.h"
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -152,8 +154,8 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 p->initAccessories(g);
             }
             createRange();
-            SetTimer(hwnd, 1, 5, NULL);
-
+            SetTimer(hwnd, 1, 10, NULL);
+            initializeWriteFactory(g);
             IWICImagingFactory* pWICFactory = NULL;
             initializeFactory(pWICFactory);
             loadBitmap(hwnd, TEXT("landscape.png"), pWICFactory, g);
@@ -189,7 +191,10 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 RectF(g->rc.left, g->rc.top, g->rc.right, g->rc.bottom),
                 1.0f,
                 D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
-
+            int score = 117;
+            WCHAR text[128];
+            swprintf(text, 128, L"Twój wynik to: %d", score);
+            write(text, g, p);
             if (!g->minigame) {
                 if (minigame) {
                     // TODO Handle minigame end

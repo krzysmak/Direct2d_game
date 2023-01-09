@@ -26,6 +26,7 @@ public:
 	bool minigame = false;
 	FLOAT arrowHitYPercent;
 	ID2D1Bitmap* landscape = nullptr;
+	IDWriteTextFormat* text_format = nullptr;
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
 	void updateRC(const HWND& hwnd);

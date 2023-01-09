@@ -110,7 +110,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d2d1.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d2d1.lib;dwrite.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <AdditionalManifestFiles>
@@ -139,6 +139,7 @@
     <ClCompile Include="GlobalValues.cpp" />
     <ClCompile Include="Minigame.cpp" />
     <ClCompile Include="PaintAccessories.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="ShootingTarget.cpp" />
     <ClCompile Include="WinMain.cpp" />
   </ItemGroup>
@@ -148,6 +149,7 @@
     <ClInclude Include="GlobalValues.h" />
     <ClInclude Include="Minigame.h" />
     <ClInclude Include="PaintAccessories.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="ShootingTarget.h" />
     <ClInclude Include="WinMain.h" />
   </ItemGroup>
