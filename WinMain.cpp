@@ -191,13 +191,15 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 RectF(g->rc.left, g->rc.top, g->rc.right, g->rc.bottom),
                 1.0f,
                 D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
-            int score = 117;
             WCHAR text[128];
-            swprintf(text, 128, L"Twój wynik to: %d", score);
+            swprintf(text, 128, L"Twój wynik to: %d", g->score);
             write(text, g, p);
             if (!g->minigame) {
                 if (minigame) {
-                    // TODO Handle minigame end
+                    free(minigame);
+                    minigame = nullptr;
+                    free(arrow);
+                    arrow = nullptr;
                 }
                 else {
                     renderShootingTargets();

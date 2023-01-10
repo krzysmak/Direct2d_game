@@ -149,6 +149,7 @@ void DrawScrap(GlobalValues *g, ID2D1Brush* brush, float x, float y, float size)
 }
 
 void Baloon::pop(GlobalValues *g, PaintAccessories *p) {
+	g->score += 1;
 	size_t number_of_scraps = 15;
 	float t = (float)(this->ticks_popped) / (float)g->baloon_pop_animation_length;
 	float radius = (this->radiusY) * (1.0f - t);

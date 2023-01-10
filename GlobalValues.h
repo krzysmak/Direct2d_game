@@ -27,6 +27,7 @@ public:
 	FLOAT arrowHitYPercent;
 	ID2D1Bitmap* landscape = nullptr;
 	IDWriteTextFormat* text_format = nullptr;
+	int score = 0;
 	GlobalValues();
 	HRESULT initValues(const HWND& hwnd);
 	void updateRC(const HWND& hwnd);

@@ -65,5 +65,25 @@ void Minigame::shootArrow(GlobalValues* g, PaintAccessories* p) {
 	g->d2d_render_target->DrawLine(start, end, p->brush, 1.0f);
 	if (this->arrowTop + this->flight_time <= limit) {
 		g->minigame = false;
+		FLOAT rise = radius / number_of_colors;
+		FLOAT midWidth = g->width / 2;
+		FLOAT thirdHeight = g->height / 3;
+		auto center = Point2F(midWidth, thirdHeight);
+		FLOAT distance = sqrt(pow(center.x - this->current_arrow_x, 2) + pow(center.y - this->arrowTop - this->flight_time, 2));
+		if (distance <= rise) {
+			g->score += 100;
+		}
+		else if (distance <= 2 * rise) {
+			g->score += 50;
+		}
+		else if (distance <= 3 * rise) {
+			g->score += 20;
+		}
+		else if (distance <= 4 * rise) {
+			g->score += 10;
+		}
+		else if (distance <= radius) {
+			g->score += 5;
+		}
 	}
 }
