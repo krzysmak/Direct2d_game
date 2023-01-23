@@ -154,7 +154,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 p->initAccessories(g);
             }
             createRange();
-            SetTimer(hwnd, 1, 10, NULL);
+            SetTimer(hwnd, 1, 15, NULL);
             initializeWriteFactory(g);
             IWICImagingFactory* pWICFactory = NULL;
             initializeFactory(pWICFactory);
@@ -176,6 +176,9 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             g->mouse_y = HIWORD(lParam);
             return 0;
         }
+        case WM_TIMER:
+            InvalidateRect(hwnd, &g->rc, 0);
+            return 0;
         case WM_PAINT:
         {
             g->updateRC(hwnd);
@@ -210,7 +213,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
                 renderMinigame();
             }
             g->d2d_render_target->EndDraw();
-            InvalidateRect(hwnd, &g->rc, 0);
+            ValidateRect(hwnd, &g->rc);
            
             return 0;
         }

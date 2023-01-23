@@ -29,10 +29,10 @@ void Arrow::calculatePosition(FLOAT mouse_x, FLOAT mouse_y, GlobalValues* g) {
 		applyRatio(heightModifier, tiltRatioY, g, true);
 		this->start = Point2F(this->start.x + widthModifier, this->start.y + heightModifier);
 		this->end = Point2F(this->end.x + widthModifier, this->end.y + heightModifier);
-		velocity += reachedTop ? 0.01 : -0.02;
-		if (velocity <= 0.6 && !this->reachedTop) {
+		velocity += reachedTop ? 0.03 : -0.05;
+		if (velocity <= 0.8 && !this->reachedTop) {
 			if (this->start.y < this->end.y) {
-				velocity += 0.3;
+				velocity += 0.4;
 			}
 			else {
 				this->reachedTop = true;
@@ -41,7 +41,7 @@ void Arrow::calculatePosition(FLOAT mouse_x, FLOAT mouse_y, GlobalValues* g) {
 		}
 	}
 	else if (this->isDrawing) {
-		velocity += 0.04;
+		velocity += 0.1;
 	}
 	else {
 		if (mouse_x == -1)

@@ -22,7 +22,7 @@ void Baloon::render(GlobalValues *g, PaintAccessories *p) {
 			g->d2d_render_target->CreateRadialGradientBrush(RadialGradientBrushProperties(center,
 				Point2F(0, 0), 70, 70), p->rad_stops, &p->rad_brush);
 			g->d2d_render_target->FillEllipse(Ellipse(center, radiusX, radiusY), p->rad_brush);
-			center.y -= 1;
+			center.y -= 2;
 			p->rad_brush->Release();
 		}
 	}
