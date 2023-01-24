@@ -26,6 +26,7 @@ public:
 	bool minigame = false;
 	FLOAT arrowHitYPercent;
 	ID2D1Bitmap* landscape = nullptr;
+	ID2D1Bitmap* pikachu = nullptr;
 	IDWriteTextFormat* text_format = nullptr;
 	int score = 0;
 	GlobalValues();

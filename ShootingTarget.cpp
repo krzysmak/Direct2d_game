@@ -48,6 +48,19 @@ void ShootingTarget::render(GlobalValues* g, PaintAccessories* p) {
 	FLOAT ellipse_size_diffrence_y = radiusY / (number_of_colors * 2);
 	FLOAT currentRadiusX = radiusX;
 	FLOAT currentRadiusY = radiusY;
+	limitY = g->height - radiusY;
+	if (goingUp) {
+		center.y -= 1;
+	}
+	else {
+		center.y += 1;
+	}
+	if (center.y - radiusY <= 0) {
+		goingUp = false;
+	}
+	if (center.y + radiusY >= limitY) {
+		goingUp = true;
+	}
 	g->d2d_render_target->FillEllipse(Ellipse(center, currentRadiusX + 1, currentRadiusY + 1), p->black_brush);
 	for (size_t i = 0; i < number_of_colors; i++) {
 		g->d2d_render_target->FillEllipse(Ellipse(center, currentRadiusX, currentRadiusY), p->target_brush[i]);

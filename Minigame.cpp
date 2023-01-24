@@ -53,23 +53,21 @@ void Minigame::moveAndRenderArrow(GlobalValues* g, PaintAccessories* p) {
 
 void Minigame::setArrowSpeed(FLOAT arrowVelocity) {
 	arrowSpeed = (INT)arrowVelocity % 10;
-	if (arrowSpeed <= 3)
-		arrowSpeed = 3;
+	if (arrowSpeed <= 5)
+		arrowSpeed = 5;
 }
 
 void Minigame::shootArrow(GlobalValues* g, PaintAccessories* p) {
-	FLOAT limit = this->target_bottom - (g->arrowHitYPercent * this->radius);
-	this->flight_time -= 4;
+	FLOAT limit = this->target_bottom - (g->arrowHitYPercent * this->radius * 2);
 	auto start = Point2F(current_arrow_x, this->arrowBottom + this->flight_time);
 	auto end = Point2F(current_arrow_x, this->arrowTop + this->flight_time);
-	g->d2d_render_target->DrawLine(start, end, p->brush, 1.0f);
 	if (this->arrowTop + this->flight_time <= limit) {
 		g->minigame = false;
 		FLOAT rise = radius / number_of_colors;
 		FLOAT midWidth = g->width / 2;
 		FLOAT thirdHeight = g->height / 3;
 		auto center = Point2F(midWidth, thirdHeight);
-		FLOAT distance = sqrt(pow(center.x - this->current_arrow_x, 2) + pow(center.y - this->arrowTop - this->flight_time, 2));
+		FLOAT distance = sqrt(pow(center.x - end.x, 2) + pow(center.y - end.y, 2));
 		if (distance <= rise) {
 			g->score += 100;
 		}
@@ -85,5 +83,9 @@ void Minigame::shootArrow(GlobalValues* g, PaintAccessories* p) {
 		else if (distance <= radius) {
 			g->score += 5;
 		}
+	}
+	else {
+		this->flight_time -= 7;
+		g->d2d_render_target->DrawLine(start, end, p->brush, 1.0f);
 	}
 }

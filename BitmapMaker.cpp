@@ -17,7 +17,11 @@ void loadBitmap(HWND hwnd, const LPCWSTR name, IWICImagingFactory* pWICFactory, 
     hr = pConverter->Initialize(pFrame, GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, NULL, 0.0, WICBitmapPaletteTypeCustom);
     if (FAILED(hr))
         exit(0);
-    hr = g->d2d_render_target->CreateBitmapFromWicBitmap(pConverter, NULL, &g->landscape);
+    if (name == TEXT("landscape.png"))
+        hr = g->d2d_render_target->CreateBitmapFromWicBitmap(pConverter, NULL, &g->landscape);
+    else if (name == TEXT("pikachu.png")) {
+        hr = g->d2d_render_target->CreateBitmapFromWicBitmap(pConverter, NULL, &g->pikachu);
+    }
     if (FAILED(hr))
         exit(0);
 }

@@ -66,7 +66,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev_instance, _
     HWND hwnd = CreateWindowEx(
         0,                              // Optional window styles.
         CLASS_NAME,                     // Window class
-        TEXT("Learn to Program Windows"),    // Window text
+        TEXT("Archer"),    // Window text
         WS_OVERLAPPEDWINDOW,            // Window style
 
         // Size and position
@@ -121,6 +121,7 @@ void createRange() {
     }
     if (range->howManyTargets() == 0) {
         range->addTarget(g->width * 0.9, g->height * 0.8, g);
+        range->addTarget(g->width * 0.6, g->height * 0.3, g);
     }
 }
 
@@ -132,8 +133,8 @@ void renderShootingTargets() {
 void renderMinigame() {
     if (!minigame) {
         minigame = new Minigame();
+        minigame->setArrowSpeed(arrow->getVelocity());
     }
-    minigame->setArrowSpeed(arrow->getVelocity());
     minigame->render(g, p);
 }
 
@@ -159,6 +160,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             IWICImagingFactory* pWICFactory = NULL;
             initializeFactory(pWICFactory);
             loadBitmap(hwnd, TEXT("landscape.png"), pWICFactory, g);
+            loadBitmap(hwnd, TEXT("pikachu.png"), pWICFactory, g);
             return 0;
         }
         case WM_DESTROY:
@@ -192,6 +194,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             g->d2d_render_target->DrawBitmap(
                 g->landscape,
                 RectF(g->rc.left, g->rc.top, g->rc.right, g->rc.bottom),
+                1.0f,
+                D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
+            g->d2d_render_target->DrawBitmap(
+                g->pikachu,
+                RectF(g->rc.left + 10, g->rc.bottom - 130, g->rc.left + 110, g->rc.bottom - 30),
                 1.0f,
                 D2D1_BITMAP_INTERPOLATION_MODE_NEAREST_NEIGHBOR);
             WCHAR text[128];

@@ -6,6 +6,8 @@
 #include "PaintAccessories.h"
 #include "GlobalValues.h"
 
+// Logika lotu strza³y wymaga dopracowania, implementacja jest naiwna, niewiele powi¹zana z fizyk¹.
+
 class Arrow {
 	D2D1_POINT_2F start;
 	D2D1_POINT_2F end;

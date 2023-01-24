@@ -88,5 +88,5 @@ void Arrow::onKeyDown(GlobalValues *g) {
 }
 
 bool Arrow::checkIfLanded(GlobalValues* g) {
-	return (start.x >= g->width || end.y >= g->ground_level);
+	return (start.x >= g->width || end.y >= g->ground_level || start.x < 0);
 }
