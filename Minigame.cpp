@@ -9,8 +9,8 @@ using D2D1::Ellipse;
 void Minigame::render(GlobalValues* g, PaintAccessories* p) {
 	FLOAT midWidth = g->width / 2;
 	FLOAT thirdHeight = g->height / 3;
-	this->arrowBottom = (thirdHeight * 2) + 30;
-	this->arrowTop = (thirdHeight * 2) + 120;
+	this->arrowBottom = (thirdHeight * 2) + 120;
+	this->arrowTop = (thirdHeight * 2) + 30;
 	this->radius = midWidth < thirdHeight ? midWidth - 40 : thirdHeight - 40;
 	auto center = Point2F(midWidth, thirdHeight);
 	this->target_bottom = center.y + this->radius;
@@ -85,7 +85,7 @@ void Minigame::shootArrow(GlobalValues* g, PaintAccessories* p) {
 		}
 	}
 	else {
-		this->flight_time -= 7;
+		this->flight_time -= 4;
 		g->d2d_render_target->DrawLine(start, end, p->brush, 1.0f);
 	}
 }
